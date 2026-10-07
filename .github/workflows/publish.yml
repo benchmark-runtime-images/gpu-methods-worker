@@ -19,7 +19,7 @@ permissions:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: benchmark-runtime-images/gpu-methods-worker
+  IMAGE_NAME: benchmark-runtime-images/gpu-methods-worker-v1
 
 jobs:
   publish:
