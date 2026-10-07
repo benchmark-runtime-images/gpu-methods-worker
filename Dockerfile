@@ -6,8 +6,12 @@ FROM ${BASE_IMAGE}
 COPY requirements.lock /tmp/requirements.lock
 RUN python3 -m pip install --no-cache-dir -r /tmp/requirements.lock \
     && rm -f /tmp/requirements.lock \
+    && install -d -m 0755 /usr/local/share/benchmark \
     && python3 - <<'PY'
 import importlib.metadata as metadata
+import importlib
+import json
+import platform
 
 expected = {
     "peft": "0.21.2",
@@ -23,10 +27,38 @@ expected = {
     "pyarrow": "25.0.1",
     "CairoSVG": "2.9.1",
     "Pillow": "12.3.0",
+    "nvidia-nccl-cu13": "2.30.7",
+    "torch": "2.13.0+cu130",
+    "transformers": "5.17.0",
+    "vllm": "0.31.0",
 }
 actual = {name: metadata.version(name) for name in expected}
 if actual != expected:
     raise SystemExit(f"runtime matrix drift: {actual}")
+for module in (
+    "peft",
+    "trl",
+    "bitsandbytes",
+    "datasets",
+    "sentence_transformers",
+    "xgboost",
+    "sklearn",
+    "torch_geometric",
+    "networkx",
+    "pandas",
+    "pyarrow",
+    "cairosvg",
+    "PIL",
+):
+    importlib.import_module(module)
+with open("/usr/local/share/benchmark/runtime-matrix.json", "w", encoding="utf-8") as handle:
+    json.dump(
+        {"python": platform.python_version(), "packages": actual},
+        handle,
+        indent=2,
+        sort_keys=True,
+    )
+    handle.write("\n")
 PY
 
 LABEL org.opencontainers.image.title="Neutral GPU methods worker" \

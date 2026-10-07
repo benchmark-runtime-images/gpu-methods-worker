@@ -4,6 +4,7 @@ bitsandbytes==0.50.2
 datasets==5.1.0
 sentence-transformers==6.1.0
 xgboost==3.4.1
+nvidia-nccl-cu13==2.30.7
 scikit-learn==1.9.1
 torch-geometric==2.8.0.post1
 networkx==3.7
