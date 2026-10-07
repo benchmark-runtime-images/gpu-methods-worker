@@ -27,4 +27,12 @@ for pattern in (
         raise SystemExit("FORBIDDEN_PUBLICATION_MATERIAL")
 if "@sha256:856891fd5e66237a5107ddc06fd6a3f212ed4a93b735263986aa25fbced02900" not in text:
     raise SystemExit("PINNED_BASE_DIGEST_MISSING")
+requirements = set((root / "requirements.lock").read_text().splitlines())
+for runtime_pin in (
+    "torch==2.13.0",
+    "transformers==5.17.0",
+    "vllm==0.31.0",
+):
+    if runtime_pin not in requirements:
+        raise SystemExit(f"CANONICAL_RUNTIME_PIN_MISSING:{runtime_pin}")
 print("PUBLICATION_PRIVACY_SCAN_PASS")

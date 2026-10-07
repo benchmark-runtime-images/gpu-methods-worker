@@ -5,6 +5,9 @@ datasets==5.1.0
 sentence-transformers==6.1.0
 xgboost==3.4.1
 nvidia-nccl-cu13==2.30.7
+torch==2.13.0
+transformers==5.17.0
+vllm==0.31.0
 scikit-learn==1.9.1
 torch-geometric==2.8.0.post1
 networkx==3.7
