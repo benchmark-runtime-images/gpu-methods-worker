@@ -4,8 +4,10 @@ FROM ${BASE_IMAGE}
 # Dependency installation happens only while building this immutable image.
 # Billed worker startup inherits the package-free managed SSH entrypoint.
 COPY requirements.lock /tmp/requirements.lock
+COPY runtime-overrides.lock /tmp/runtime-overrides.lock
 RUN python3 -m pip install --no-cache-dir -r /tmp/requirements.lock \
-    && rm -f /tmp/requirements.lock \
+    && python3 -m pip install --no-cache-dir --no-deps -r /tmp/runtime-overrides.lock \
+    && rm -f /tmp/requirements.lock /tmp/runtime-overrides.lock \
     && install -d -m 0755 /usr/local/share/benchmark \
     && python3 - <<'PY'
 import importlib.metadata as metadata

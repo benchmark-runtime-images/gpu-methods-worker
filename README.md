@@ -8,6 +8,10 @@ Worker startup performs no package installation.
 The build verifies imports for the complete training, retrieval, classical-ML
 and vision stack and preserves the base runtime's PyTorch 2.13.0+cu130,
 Transformers 5.17.0, vLLM 0.31.0 and NCCL 2.30.7 versions.
+PyTorch's wheel metadata names NCCL 2.29.7, so the already-frozen NCCL 2.30.7
+Blackwell override is isolated in `runtime-overrides.lock`, applied without
+dependency resolution after the main stack, and then checked by the exact
+final runtime-matrix verifier.
 
 The source and image contain no credentials, SSH private keys, model weights,
 benchmark fixtures, hidden references, graders, private mappings, client data,

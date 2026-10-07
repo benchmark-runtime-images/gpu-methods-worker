@@ -1,0 +1,4 @@
+# The canonical Blackwell image deliberately carries this newer NCCL build.
+# Install it without dependency resolution only after the PyTorch-constrained
+# application stack is complete, then verify the entire final matrix.
+nvidia-nccl-cu13==2.30.7

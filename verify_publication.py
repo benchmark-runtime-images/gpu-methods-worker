@@ -7,6 +7,7 @@ expected = {
     "Dockerfile",
     "README.md",
     "requirements.lock",
+    "runtime-overrides.lock",
     "verify_publication.py",
     ".github/workflows/publish.yml",
 }
@@ -35,4 +36,10 @@ for runtime_pin in (
 ):
     if runtime_pin not in requirements:
         raise SystemExit(f"CANONICAL_RUNTIME_PIN_MISSING:{runtime_pin}")
+overrides = set((root / "runtime-overrides.lock").read_text().splitlines())
+if "nvidia-nccl-cu13==2.30.7" not in overrides:
+    raise SystemExit("CANONICAL_NCCL_OVERRIDE_MISSING")
+dockerfile = (root / "Dockerfile").read_text()
+if "--no-deps -r /tmp/runtime-overrides.lock" not in dockerfile:
+    raise SystemExit("CANONICAL_NCCL_OVERRIDE_NOT_ISOLATED")
 print("PUBLICATION_PRIVACY_SCAN_PASS")
