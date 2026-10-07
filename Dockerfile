@@ -51,14 +51,11 @@ for module in (
     "PIL",
 ):
     importlib.import_module(module)
+matrix = {"python": platform.python_version(), "packages": actual}
 with open("/usr/local/share/benchmark/runtime-matrix.json", "w", encoding="utf-8") as handle:
-    json.dump(
-        {"python": platform.python_version(), "packages": actual},
-        handle,
-        indent=2,
-        sort_keys=True,
-    )
+    json.dump(matrix, handle, indent=2, sort_keys=True)
     handle.write("\n")
+print("FROZEN_RUNTIME_MATRIX=" + json.dumps(matrix, sort_keys=True))
 PY
 
 LABEL org.opencontainers.image.title="Neutral GPU methods worker" \
